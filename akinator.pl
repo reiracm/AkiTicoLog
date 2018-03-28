@@ -1,9 +1,8 @@
 % ---------------------------------------------------------------------------------
 % Base de Datos.
 % ---------------------------------------------------------------------------------
-
 famositico('Keylor Navas',[hombre,futbol,1986,31,sanjose,1.85,vivo]).
-famositico('Bryan RuÃ­z',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
+famositico('Bryan Ruíz',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
 famositico('Andrey Amador',[hombre,ciclismo,1986,31,alajuela,1.80,vivo]).
 famositico('Nery Brenes',[hombre,atletismo,1985,32,limon,1.75,vivo]).
 famositico('Shirley Cruz',[mujer,futbol,1985,32,sanjose,1.63,vivo]).
@@ -21,155 +20,138 @@ famositico('Jorge Debravo',[hombre,escritor,1938,29,1967,cartago,muerto]).
 
 famositico('Oscar Arias',[hombre,politico,1940,77,heredia,vivo]).
 
-famositico('JosÃ© Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
+famositico('José Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
 famositico('Fidel Gamboa',[hombre,musico,1961,50,2011,guanacaste,muerto]).
-
 % ---------------------------------------------------------------------------------
-
-% FunciÃ³n para conocer el largo de una lista.
+% Función para conocer el largo de una lista.
 largo([], 0) :- !.
 largo([_|Lr], C) :- largo(Lr, C1), C is C1 + 1.
 
-% FunciÃ³n  que agrega un elemento al final de una lista.
+% Función  que agrega un elemento al final de una lista.
 agregar(X, [], [X]).
 agregar(X, [C|R], [C|R1]) :- agregar(X, R, R1).
 
-% FunciÃ³n  para determinar si un elemento pertenece a una lista.
+% Función  para determinar si un elemento pertenece a una lista.
 miembro(E, [E|_]).
 miembro(E, [_|Lr]) :- miembro(E, Lr).
 
-% FunciÃ³n para determinar si A es subconjunto de B.
+% Función para determinar si A es subconjunto de B.
 subconjunto([], _).
 subconjunto([Ah|Ar], B) :- miembro(Ah, B), subconjunto(Ar, B).
-
 % ---------------------------------------------------------------------------------
-
-% FunciÃ³n que busca los famosos en la base de datos que cumplan con las
+% Función que busca los famosos en la base de datos que cumplan con las
 % caracteristicas dadas.
 buscarFamoso(X, LC) :- famositico(X, LI), subconjunto(LC, LI).
-
 % ---------------------------------------------------------------------------------
 
 jugar :- write(' '), nl,
-         write(' Â¡Bienvenido a AkiTicoLog!'), nl,
+         write(' ¡Bienvenido a AkiTicoLog!'), nl,
          write(' Piense en un personaje tico famoso...'), nl,
-         write(' Intentaremos adivinar el personaje que estÃ¡ pensando.'), nl,
+         write(' Intentaremos adivinar el personaje que está pensando.'), nl,
          write(' '), nl,
          pregunta1([]).
 
 pregunta1(LC) :-
-             writeln(' Â¿Su personaje es hombre o mujer?'),
-             read(Sexo),
-             %Agregamos la respuesta del jugador a la lista de caracterÃ­sticas.
+             writeln(' ¿Su personaje es hombre o mujer?'),
+             read(OracionSexo),
+             analizarFrase(OracionSexo, Sexo),
+             write(Sexo),
+             %Agregamos la respuesta del jugador a la lista de características.
              agregar(Sexo, LC, LCA),
              %Buscamos a los famosos que cumplan las condiciones actuales.
              findall(X, buscarFamoso(X,LCA), LS),
-
              write(LCA), nl,
              write(LS), nl,
-
              %No encontramos al famoso, llamamos a la siguiente pregunta.
              write(' '), nl,
              pregunta2(LCA), !.
 
 pregunta2(LC) :-
-             writeln(' Â¿En cuÃ¡l provincia naciÃ³ su personaje?'),
+             writeln(' ¿En cuál provincia nació su personaje?'),
              read(Provincia),
-
-             %El jugador no sabe la respuesta, llamamos la siguiente pregunta.
-             %Provincia == siguiente,
-             %write(' '), nl, pregunta3(LC), !;
-
-             %Agregamos la respuesta del jugador a lista de caracterÃ­sticas.
-             agregar(Provincia, LC, LCA),
-             %Buscamos a los famosos que cumplan las condiciones actuales.
-             findall(X, buscarFamoso(X,LCA), LS),
-
-             write(LCA), nl,
-             write(LS), nl,
-
-             %No encontramos al famoso, llamamos a la siguiente pregunta.
-             write(' '), nl,
-             pregunta3(LCA), !.
+             Provincia \= siguiente,
+             ( %Agregamos la respuesta del jugador a lista de características.
+               agregar(Provincia, LC, LCA),
+               %Buscamos a los famosos que cumplan las condiciones actuales.
+               findall(X, buscarFamoso(X,LCA), LS),
+               write(LCA), nl,
+               write(LS), nl,
+               %Encontramos al famoso buscado.
+               %No encontramos al famoso, pasamos a la siguiente pregunta.
+               write(' '), nl,
+               pregunta3(LCA), !);
+             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
+             write(LC), nl, write(' '), nl, pregunta3(LC), !.
 
 pregunta3(LC) :-
-             writeln(' Â¿CuÃ¡l es el aÃ±o de nacimiento de su personaje?'),
+             writeln(' ¿Cuál es el año de nacimiento de su personaje?'),
              read(AnoNacimiento),
-
-             %El jugador no sabe la respuesta, llamamos la siguiente pregunta.
-             %AnoNacimiento == siguiente,
-             %pregunta4(LC), !;
-
-             %Agregamos la respuestas del jugador a lista de caracterÃ­sticas.
-             agregar(AnoNacimiento, LC, LCA),
-             %Buscamos a los famosos que cumplan las condiciones actuales.
-             findall(X, buscarFamoso(X,LCA), LS),
-
-             write(LCA), nl,
-             write(LS), nl,
-
-             %No encontramos al famoso, llamamos a la siguiente pregunta.
-             write(' '), nl,
-             pregunta4(LCA), !.
+             AnoNacimiento \= siguiente,
+             ( %Agregamos la respuestas del jugador a lista de características.
+               agregar(AnoNacimiento, LC, LCA),
+               %Buscamos a los famosos que cumplan las condiciones actuales.
+               findall(X, buscarFamoso(X,LCA), LS),
+               write(LCA), nl,
+               write(LS), nl,
+               %Encontramos al famoso buscado.
+               %No encontramos al famoso, pasamos a la siguiente pregunta.
+               write(' '), nl,
+               pregunta4(LCA), !);
+             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
+             write(LC), nl, write(' '), nl, pregunta4(LC), !.
 
 pregunta4(LC) :-
-             writeln(' Â¿CuÃ¡l es la edad de su personaje?'),
+             writeln(' ¿Cuál es la edad de su personaje?'),
              read(Edad),
-
-             %El jugador no sabe la respuesta, llamamos la siguiente pregunta.
-             %Edad == siguiente,
-             %pregunta5(LC), !;
-
-             %Agregamos la respuesta del jugador a lista de caracterÃ­sticas.
-             agregar(Edad, LC, LCA),
-             %Buscamos a los famosos que cumplan las condiciones actuales.
-             findall(X, buscarFamoso(X,LCA), LS),
-
-             write(LCA), nl,
-             write(LS), nl,
-
-             write(' '), nl,
-             pregunta5(LCA), !.
+             Edad \= siguiente,
+             ( %Agregamos la respuestas del jugador a lista de características.
+               agregar(Edad, LC, LCA),
+               %Buscamos a los famosos que cumplan las condiciones actuales.
+               findall(X, buscarFamoso(X,LCA), LS),
+               write(LCA), nl,
+               write(LS), nl,
+               %Encontramos al famoso buscado.
+               %No encontramos al famoso, pasamos a la siguiente pregunta.
+               write(' '), nl,
+               pregunta5(LCA), !);
+             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
+             write(LC), nl, write(' '), nl, pregunta5(LC), !.
 
 pregunta5(LC) :-
-             writeln(' Â¿Su personaje se encuentra vivo o muerto?'),
+             writeln(' ¿Su personaje se encuentra vivo o muerto?'),
              read(Estado),
-             %Agregamos la respuesta del jugador a la lista de caracterÃ­sticas.
+             %Agregamos la respuesta del jugador a la lista de características.
              agregar(Estado, LC, LCA),
              %Buscamos a los famosos que cumplan las condiciones actuales.
              findall(X, buscarFamoso(X,LCA), LS),
-
              write(LCA), nl,
              write(LS), nl,
-
              write(' '), nl,
 
-             Estado == muerto,
-             preguntaFallecimiento(LC), !;
+             Estado = muerto,
+             preguntaFallecimiento(LCA), !;
 
-             pregunta6(LC), !.
-
-preguntaFallecimiento(LC) :-
-             writeln(' Â¿CuÃ¡l es el aÃ±o de fallecimiento de su personaje?'),
-             read(AnoFallecimiento),
-
-             %El jugador no sabe la respuesta, llamamos la siguiente pregunta.
-             %AnoFallecimiento == siguiente,
-             %pregunta6(LC), !;
-
-             %Agregamos la respuesta del jugador a la lista de caracterÃ­sticas.
-             agregar(AnoFallecimiento, LC, LCA),
-             %Buscamos a los famosos que cumplan las condiciones actuales.
-             findall(X, buscarFamoso(X,LCA), LS),
-
-             write(LCA), nl,
-             write(LS), nl,
-
-             write(' '), nl,
              pregunta6(LCA), !.
 
+preguntaFallecimiento(LC) :-
+             writeln(' ¿Cuál es el año de fallecimiento de su personaje?'),
+             read(AnoFallecimiento),
+             AnoFallecimiento \= siguiente,
+             ( %Agregamos la respuestas del jugador a lista de características.
+               agregar(AnoFallecimiento, LC, LCA),
+               %Buscamos a los famosos que cumplan las condiciones actuales.
+               findall(X, buscarFamoso(X,LCA), LS),
+               write(LCA), nl,
+               write(LS), nl,
+               %Encontramos al famoso buscado.
+               %No encontramos al famoso, pasamos a la siguiente pregunta.
+               write(' '), nl,
+               pregunta6(LCA), !);
+             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
+             write(LC), nl, write(' '), nl, pregunta6(LC), !.
+
 pregunta6(LC) :-
-             writeln(' Â¿Su personaje se dedica a los deportes?'),
+             writeln(' ¿Su personaje se dedica a los deportes?'),
              read(Deportista),
 
              Deportista == si,
@@ -180,9 +162,9 @@ pregunta6(LC) :-
              pregunta7(LC), !.
 
 preguntaDeportes1(LC) :-
-             writeln(' Â¿CuÃ¡l deporte practica su personaje?'),
+             writeln(' ¿Cuál deporte practica su personaje?'),
              read(Deporte),
-             %Agregamos la respuesta del jugador a la lista de caracterÃ­sticas
+             %Agregamos la respuesta del jugador a la lista de características
              agregar(Deporte, LC, LCA),
              %Buscamos a los famosos que cumplan las condiciones actuales
              findall(X, buscarFamoso(X,LCA), ListaSoluciones),
@@ -190,18 +172,14 @@ preguntaDeportes1(LC) :-
              write(LCA), nl,
              write(ListaSoluciones), nl,
 
-             %Si encontramos al famoso buscado.
-             %largo(ListaSoluciones, N), N == 1,
-             %imprimirSolucion(ListaSoluciones), !;
-
              %Sino llamamos a la siguiente pregunta.
              write(' '), nl,
              pregunta8(LCA), !.
 
 pregunta7(LC) :-
-             writeln(' Â¿CuÃ¡l es la profesiÃ³n de su personaje?'),
+             writeln(' ¿Cuál es la profesión de su personaje?'),
              read(Profesion),
-             %Agregamos la respuestas del jugador a lista de caracterÃ­sticas
+             %Agregamos la respuestas del jugador a lista de características
              agregar(Profesion, LC, LCA),
              %Buscamos a los famosos que cumplan las condiciones actuales
              findall(X, buscarFamoso(X,LCA), LS),
@@ -209,42 +187,39 @@ pregunta7(LC) :-
              write(LCA), nl,
              write(LS), nl,
 
-             %Si encontramos al famoso buscado.
-             %largo(ListaSoluciones, N), N == 1,
-             %imprimirSolucion(ListaSoluciones), !;
-
              %Sino llamamos a la siguiente pregunta.
              write(' '), nl,
              pregunta8(LCA), !.
 
 pregunta8(LC) :-
-             writeln(' Â¿CuÃ¡l es la altura de su personaje'),
-             read(Altura),
-
-             %El jugador no sabe la respuesta, llamamos la siguiente pregunta.
-             Altura == siguiente,
-             respuestaFinal(LC), !;
-
-             %Agregamos la respuestas del jugador a lista de caracterÃ­sticas
-             agregar(Altura, LC, LCA),
-             write(LCA), nl,
-
-             write(' '), nl,
-             respuestaFinal(LCA), !.
+             writeln(' ¿Cuál es la estatura de su personaje'),
+             read(Estatura),
+             Estatura \= siguiente,
+             ( %Agregamos la respuestas del jugador a lista de características.
+               agregar(Estatura, LC, LCA),
+               %Buscamos a los famosos que cumplan las condiciones actuales.
+               findall(X, buscarFamoso(X,LCA), LS),
+               write(LCA), nl,
+               write(LS), nl,
+               write(' '), nl,
+               respuestaFinal(LCA), !);
+             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
+             write(LC), nl, write(' '), nl, respuestaFinal(LC), !.
 
 respuestaFinal(LC) :-
              %Buscamos a los famosos que cumplan las condiciones actuales
              findall(X, buscarFamoso(X,LC), LS),
-             write(LS), nl,
 
-             %Se encontro el famoso buscado
+             %Se encontro el famoso buscado.
+
+             write(LS), nl,
 
              %No se encontro al famoso buscado.
              write(' '), nl,
-             writeln('El personaje que estÃ¡ pensando no se encuentra').
+             writeln('No pudimos adivinar su personaje :(').
+
 
 %Determinantes
-
 determinante(singular,masc,[un|S],S).
 determinante(singular,fem,[una|S],S).
 determinante(singular,masc,[todo|S],S).
@@ -253,7 +228,6 @@ determinante(singular,fem,[si|S],S).
 determinante(singular,fem,[no|S],S).
 
 %Preposiciones
-%
 preposicion([a|S],S).
 preposicion([de|S],S).
 preposicion([desde|S],S).
@@ -262,7 +236,6 @@ preposicion([sin|S],S).
 preposicion([por|S],S).
 
 %Sustantivos
-
 sustantivo(singular,masc,[futbolista|S],S).
 sustantivo(singular,masc,[futbol|S],S).
 sustantivo(singular,fem,[boxeadora|S],S).
@@ -285,11 +258,12 @@ sustantivo(singular,fem,[alajuela|S],S).
 sustantivo(singular,masc,[limon|S],S).
 sustantivo(singular,masc,[guanacaste|S],S).
 sustantivo(singular,fem,[deportes|S],S).
-sustantivo(plural,fem,[aÃ±os|S],S).
+sustantivo(plural,fem,[años|S],S).
 sustantivo(plural,fem,[metros|S],S).
 sustantivo(singular,masc,[personaje|S],S).
 sustantivo(singular,masc,[hombre|S],S).
 
+%Adjetivos
 adjetivo(plural,fem,[31|S],S).
 adjetivo(plural,fem,[32|S],S).
 adjetivo(plural,fem,[35|S],S).
@@ -300,7 +274,6 @@ adjetivo(plural,fem,[77|S],S).
 adjetivo(plural,fem,[58|S],S).
 adjetivo(plural,fem,[40|S],S).
 adjetivo(plural,fem,[50|S],S).
-
 
 adjetivo(plural,fem,[1.85|S],S).
 adjetivo(plural,fem,[1.80|S],S).
@@ -316,7 +289,6 @@ adjetivo(singular,fem,[muerto|S],S).
 
 
 %Verbos
-
 verbo(singular,[mide|S],S).
 verbo(singular,[murio|S],S).
 verbo(singular,[nacio|S],S).
@@ -327,75 +299,48 @@ verbo(singular,[se|S],S).
 verbo(singular,[esta|S],S).
 verbo(singular,[vive|S],S).
 
-
-
 %Sujeto
 sujeto(singular,fem,[ella|S],S).
 sujeto(singular,masc,[el|S],S).
 sujeto(singular,masc,[yo|S],S).
 
-
-
-frase(S):-% read_line_to_codes(user_input,Cs),
+analizarFrase(S,V):-% read_line_to_codes(user_input,Cs),
     %atom_codes(A, Cs),
     %atomic_list_concat(S,' ',A),
-    oracion(_,_,S,[]).
+    oracion(_,_,S,[]), V is S.
 
-% ------------------------------------------------------------------------
-% FunciÃ³n que analiza ambos sintagmas de la oracion
+% ---------------------------------------------------------------------------------
+%Función que analiza ambos sintagmas de la oracion
+oracion(Num,Genero,S0,S):- sintagma_nominal(Num,Genero,S0,S1),
+                             sintagma_verbal(Num,S1,S).
 
-oracion(Num,Genero,S0,S):- sintagma_nominal(Num,Genero,S0,S1),sintagma_verbal(Num,S1,S).
+% ---------------------------------------------------------------------------------
+%Sintagma nominal y verbal
+sintagma_nominal(Num,Genero,S0,S):- determinante(Num,Genero,S0,S1),
+                                    sujeto(Num,Genero,S1,S),!.
 
-% ------------------------------------------------------------------------
-% Sintagma nominal y verbal
+sintagma_nominal(Num,Genero,S0,S):- determinante(Num,Genero,S0,S),!.
 
+sintagma_nominal(Num,Genero,S0,S):- sujeto(Num,Genero,S0,S),!.
 
-sintagma_nominal(Num,Genero,S0,S):-determinante(Num,Genero,S0,S1),
+sintagma_verbal(Num,S0,S):- verbo(Num,S0,S1),
+                            compl_dir(S1,S),!.
 
-                                   sujeto(Num,Genero,S1,S),!.
+sintagma_verbal(Num,S0,S):- compl_dir(S0,S1),
+                            verbo(Num,S1,S),!.
 
-sintagma_nominal(Num,Genero,S0,S):-determinante(Num,Genero,S0,S),!.
+sintagma_verbal(Num,S0,S):- verbo(Num,S0,S),!.
 
-sintagma_nominal(Num,Genero,S0,S):-sujeto(Num,Genero,S0,S),!.
+sujeto(Num,Genero,S0,S):- sustantivo(Num,Genero,S0,S),write(S0),!.
 
-sintagma_verbal(Num,S0,S):-verbo(Num,S0,S1),
-                           compl_dir(S1,S),
-                           !.
+sujeto(Num,Genero,S0,S):- sustantivo(Num,Genero,S0,S1),que(Num,S1,S),!.
 
-sintagma_verbal(Num,S0,S):-compl_dir(S0,S1),
+que(Num,[que|S0],S):- sintagma_verbal(Num,S0,S).
 
-                           verbo(Num,S1,S),
-                           !.
+compl_dir(S0,S):- preposicion(S0,S1), sintagma_nominal(_,_,S1,S),!.
 
-sintagma_verbal(Num,S0,S):-verbo(Num,S0,S),!.
+compl_dir(S0,S):- adjetivo(_,_,S0,S),!.
 
-sujeto(Num,Genero,S0,S):-sustantivo(Num,Genero,S0,S),
-    write(S0),!.
+compl_dir(S0,S):- adjetivo(_,_,S0,S1), sintagma_nominal(_,_,S1,S),!.
 
-sujeto(Num,Genero,S0,S):-sustantivo(Num,Genero,S0,S1),
-                         que(Num,S1,S),!.
-
-que(Num,[que|S0],S):-sintagma_verbal(Num,S0,S).
-
-
-compl_dir(S0,S):-preposicion(S0,S1),
-                 sintagma_nominal(_,_,S1,S),
-                 !.
-
-compl_dir(S0,S):-adjetivo(_,_,S0,S),
-                !.
-
-
-compl_dir(S0,S):-adjetivo(_,_,S0,S1),
-
-                 sintagma_nominal(_,_,S1,S),!.
-
-compl_dir(S0,S):-sintagma_nominal(_,_,S0,S),!.
-
-
-
-
-
-
-
-
+compl_dir(S0,S):- sintagma_nominal(_,_,S0,S),!.
