@@ -1,6 +1,7 @@
 % ---------------------------------------------------------------------------------
 % Base de Datos.
 % ---------------------------------------------------------------------------------
+
 famositico('Keylor Navas',[hombre,futbol,1986,31,sanjose,1.85,vivo]).
 famositico('Bryan Ruíz',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
 famositico('Andrey Amador',[hombre,ciclismo,1986,31,alajuela,1.80,vivo]).
@@ -22,6 +23,7 @@ famositico('Oscar Arias',[hombre,politico,1940,77,heredia,vivo]).
 
 famositico('José Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
 famositico('Fidel Gamboa',[hombre,musico,1961,50,2011,guanacaste,muerto]).
+
 % ---------------------------------------------------------------------------------
 
 % Función para conocer el largo de una lista.
@@ -39,11 +41,13 @@ miembro(E, [_|Lr]) :- miembro(E, Lr).
 % Función para determinar si A es subconjunto de B.
 subconjunto([], _).
 subconjunto([Ah|Ar], B) :- miembro(Ah, B), subconjunto(Ar, B).
+
 % ---------------------------------------------------------------------------------
 
 % Función que busca los famosos en la base de datos que cumplan con las
 % caracteristicas dadas.
 buscarFamoso(X, LC) :- famositico(X, LI), subconjunto(LC, LI).
+
 % ---------------------------------------------------------------------------------
 
 jugar :- write(' '), nl,
