@@ -315,6 +315,7 @@ analizarFrase(S,V):-% read_line_to_codes(user_input,Cs),
     oracion(_,_,S,[]), V is S.
 
 % ---------------------------------------------------------------------------------
+
 %Función que analiza ambos sintagmas de la oracion
 oracion(Num,Genero,S0,S):- sintagma_nominal(Num,Genero,S0,S1),
                              sintagma_verbal(Num,S1,S).
