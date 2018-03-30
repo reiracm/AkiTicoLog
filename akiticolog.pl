@@ -9,13 +9,13 @@ famositico('Keylor Navas',[hombre,futbol,1986,31,sanjose,1.85,vivo]).
 famositico('Bryan Ruíz',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
 famositico('Andrey Amador',[hombre,ciclismo,1986,31,alajuela,1.80,vivo]).
 famositico('Nery Brenes',[hombre,atletismo,1985,32,limon,1.75,vivo]).
-famositico('Shirley Cruz',[mujer,futbol,1985,32,sanjose,1.63,vivo]).
-famositico('Hanna Gabriels',[mujer,boxeo,1983,35,alajuela,1.87,vivo]).
-famositico('Claudia Poll',[mujer,natacion,1972,46,nicaragua,1.91,vivo]).
-famositico('Debi Nova',[mujer,cantante,1980,37,sanjose,vivo]).
-famositico('Maribel Guardia',[mujer,actriz,1959,58,sanjose,1.70,vivo]).
+famositico('Shirley Cruz',[mujer,futbol,1985,32,sanjose,1.63,viva]).
+famositico('Hanna Gabriels',[mujer,boxeo,1983,35,alajuela,1.87,viva]).
+famositico('Claudia Poll',[mujer,natacion,1972,46,nicaragua,1.91,viva]).
+famositico('Debi Nova',[mujer,cantante,1980,37,sanjose,viva]).
+famositico('Maribel Guardia',[mujer,actriz,1959,58,sanjose,1.70,viva]).
 famositico('Franklin Chang',[hombre,ingeniero,1950,67,sanjose,vivo]).
-famositico('Sandra Cauffman',[mujer,ingeniera,1962,55,sanjose,vivo]).
+famositico('Sandra Cauffman',[mujer,ingeniera,1962,55,sanjose,viva]).
 famositico('Jorge Debravo',[hombre,escritor,1938,29,1967,cartago,muerto]).
 famositico('Oscar Arias',[hombre,politico,1940,77,heredia,vivo]).
 famositico('José Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
@@ -60,11 +60,6 @@ jugar:- write(' '), nl,
         write(' ¡Bienvenido a AkiTicoLog!'), nl,
         write('  Piense en un personaje tico famoso...'), nl,
         write('  Intentaremos adivinar el personaje que está pensando.'), nl,
-        write('  Instrucciones de juego:  '), nl,
-        write('  Expresar cada una de sus respuestas entre parentesis cuadrados([]) y cada palabra separada por una coma'),nl,
-        write('  Finalizar cada respuesta con punto'),nl,
-        write('  En caso de no conocer la respuesta a la pregunta responder: "siguiente",seguido por un punto(.)'),nl,
-        write('  ¡Ahora a jugar!'),nl,
         write(' '), nl,
         pregunta1.
 
@@ -285,6 +280,7 @@ sustantivo(plural,fem,[años|S],S).
 sustantivo(plural,fem,[metros|S],S).
 sustantivo(singular,masc,[personaje|S],S).
 sustantivo(singular,masc,[hombre|S],S).
+sustantivo(singular,fem,[mujer|S],S).
 sustantivo(singular,masc,[31|S],S).
 sustantivo(singular,masc,[2001|S],S).
 sustantivo(plural,fem,[31|S],S).
@@ -331,6 +327,7 @@ sustantivo(plural,fem,[1.70|S],S).
 sustantivo(plural,fem,[1.88|S],S).
 
 sustantivo(singular,fem,[vivo|S],S).
+sustantivo(singular,fem,[viva|S],S).
 sustantivo(singular,fem,[muerto|S],S).
 
 %Verbos
