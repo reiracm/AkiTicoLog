@@ -6,7 +6,7 @@
 % ---------------------------------------------------------------------------------
 
 famositico('Keylor Navas',[hombre,futbol,1986,31,sanjose,1.85,vivo]).
-famositico('Bryan RuÃ­z',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
+famositico('Bryan Ruíz',[hombre,futbol,1985,32,sanjose,1.88,vivo]).
 famositico('Andrey Amador',[hombre,ciclismo,1986,31,alajuela,1.80,vivo]).
 famositico('Nery Brenes',[hombre,atletismo,1985,32,limon,1.75,vivo]).
 famositico('Shirley Cruz',[mujer,futbol,1985,32,sanjose,1.63,viva]).
@@ -18,32 +18,32 @@ famositico('Franklin Chang',[hombre,ingeniero,1950,67,sanjose,vivo]).
 famositico('Sandra Cauffman',[mujer,ingeniera,1962,55,sanjose,viva]).
 famositico('Jorge Debravo',[hombre,escritor,1938,29,1967,cartago,muerto]).
 famositico('Oscar Arias',[hombre,politico,1940,77,heredia,vivo]).
-famositico('JosÃ© Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
+famositico('José Capmany',[hombre,musico,1961,40,2001,sanjose,muerto]).
 famositico('Fidel Gamboa',[hombre,musico,1961,50,2011,guanacaste,muerto]).
 
 % ---------------------------------------------------------------------------------
 
-%FunciÃ³n para conocer el largo de una lista.
+%Función para conocer el largo de una lista.
 largo([], 0):- !.
 largo([_|Lr], C):- largo(Lr, C1), C is C1 + 1.
 
-%FunciÃ³n  para determinar si un elemento pertenece a una lista.
+%Función  para determinar si un elemento pertenece a una lista.
 miembro(E, [E|_]).
 miembro(E, [_|Lr]):- miembro(E, Lr).
 
-%FunciÃ³n para determinar si A es subconjunto de B.
+%Función para determinar si A es subconjunto de B.
 subconjunto([], _).
 subconjunto([Ah|Ar], B):- miembro(Ah, B), subconjunto(Ar, B).
 
 % ---------------------------------------------------------------------------------
 
-%FunciÃ³n que busca al famoso que cumpla las caracteristicas dadas.
+%Función que busca al famoso que cumpla las caracteristicas dadas.
 buscarFamoso(X, LC):- famositico(X, LI), subconjunto(LC, LI).
 
 %Crea un hecho en tiempo de ejecucion con el valor dado.
 crearHecho([Valor|_]):- asserta(valorRecibido(Valor)).
 
-%Limpia los hechos creados en tiempo de ejecuciÃ³n.
+%Limpia los hechos creados en tiempo de ejecución.
 limpiarHechos:- retractall(valorRecibido(_)).
 
 %Imprime el nombre de un personaje.
@@ -51,32 +51,37 @@ imprimirSolucion([Nombre|_]):-  nl, write(' Su personaje es: '),
                                 write(Nombre), write('!'), nl.
 
 % ---------------------------------------------------------------------------------
-% LC  - Lista CaracterÃ­sticas.
+% LC  - Lista Características.
 % NF  - Nombre Famoso
 % LS  - Lista Soluciones.
 % ---------------------------------------------------------------------------------
 
 jugar:- write(' '), nl,
-        write(' Â¡Bienvenido a AkiTicoLog!'), nl,
+        write(' ¡Bienvenido a AkiTicoLog!'), nl,
         write('  Piense en un personaje tico famoso...'), nl,
-        write('  Intentaremos adivinar el personaje que estÃ¡ pensando.'), nl,
+        write('  Intentaremos adivinar el personaje que está pensando.'), nl,
+        write('  Instrucciones de juego:  '), nl,
+        write('    - Expresar cada una de sus respuestas entre parentesis cuadrados([]) y cada palabra separada por una coma'),nl,
+        write('    - Finalizar cada respuesta con punto'),nl,
+        write('    - En caso de no conocer la respuesta a la pregunta responder: "siguiente",seguido por un punto(.)'),nl,
+        write('  !Ahora a jugar!'),nl,
         write(' '), nl,
         pregunta1.
 
-pregunta1:- writeln(' Â¿Su personaje es hombre o mujer? *'),
+pregunta1:- writeln(' ¿Su personaje es hombre o mujer? *'),
             read(OracionSexo),
-            %El jugador ingreso una oraciÃ³n correcta.
+            %El jugador ingreso una oración correcta.
             analizarFrase(OracionSexo), write(' '), nl, pregunta2, !;
-            %El jugador ingreso una oraciÃ³n incorrecta.
-            write(' No entendÃ­, repÃ­telo.'), pregunta1, !.
+            %El jugador ingreso una oración incorrecta.
+            write(' No entendí, repítelo.'), pregunta1, !.
 
-pregunta2:- writeln(' Â¿En cuÃ¡l provincia naciÃ³ su personaje?'),
+pregunta2:- writeln(' ¿En cuál provincia nació su personaje?'),
             read(OracionProvincia),
             %El jugador sabe la respuesta.
             OracionProvincia \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionProvincia),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -84,18 +89,18 @@ pregunta2:- writeln(' Â¿En cuÃ¡l provincia naciÃ³ su personaje?'),
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta3, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta2, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta2, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta3, !.
 
-pregunta3:- writeln(' Â¿CuÃ¡l es el aÃ±o de nacimiento de su personaje?'),
+pregunta3:- writeln(' ¿Cuál es el año de nacimiento de su personaje?'),
             read(OracionAnoNacimiento),
             %El jugador sabe la respuesta.
             OracionAnoNacimiento \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionAnoNacimiento),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -103,18 +108,18 @@ pregunta3:- writeln(' Â¿CuÃ¡l es el aÃ±o de nacimiento de su personaje?'),
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta4, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta3, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta3, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta4, !.
 
-pregunta4:- writeln(' Â¿CuÃ¡ntos aÃ±os tiene su personaje?'),
+pregunta4:- writeln(' ¿Cuántos años tiene su personaje?'),
             read(OracionEdad),
             %El jugador sabe la respuesta.
             OracionEdad \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionEdad),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -122,18 +127,18 @@ pregunta4:- writeln(' Â¿CuÃ¡ntos aÃ±os tiene su personaje?'),
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta5, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta4, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta4, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta5, !.
 
-pregunta5:- writeln(' Â¿Su personaje se encuentra vivo o muerto?'),
+pregunta5:- writeln(' ¿Su personaje se encuentra vivo o muerto?'),
             read(OracionEstado),
             %El jugador sabe la respuesta.
             OracionEstado \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionEstado),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -143,19 +148,19 @@ pregunta5:- writeln(' Â¿Su personaje se encuentra vivo o muerto?'),
                   write(' '), nl,
                   valorRecibido(Estado), Estado == vivo, pregunta6, !;
                   preguntaFallecimiento, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta4, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta4, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta5, !.
 
 preguntaFallecimiento:-
-            writeln(' Â¿CuÃ¡l es el aÃ±o de fallecimiento de su personaje?'),
+            writeln(' ¿Cuál es el año de fallecimiento de su personaje?'),
             read(OracionAnoFallecimiento),
             %El jugador sabe la respuesta.
             OracionAnoFallecimiento \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionAnoFallecimiento),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -163,25 +168,25 @@ preguntaFallecimiento:-
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta6, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), preguntaFallecimiento, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), preguntaFallecimiento, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta6, !.
 
-pregunta6:- writeln(' Â¿Su personaje se dedica a los deportes (si|no)? *'),
+pregunta6:- writeln(' ¿Su personaje se dedica a los deportes (si|no)? *'),
             read(Deportista), write(' '), nl,
             Deportista == si, preguntaDeportes1, !;
             %Sino es un deportista.
             pregunta7, !.
 
 preguntaDeportes1:-
-            writeln(' Â¿CuÃ¡l deporte practica su personaje?'),
+            writeln(' ¿Cuál deporte practica su personaje?'),
             read(OracionDeporte),
             %El jugador sabe la respuesta.
             OracionDeporte \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionDeporte),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -189,18 +194,18 @@ preguntaDeportes1:-
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta8, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), preguntaDeportes1, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), preguntaDeportes1, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta8, !.
 
-pregunta7:- writeln(' Â¿CuÃ¡l es la profesiÃ³n de su personaje?'),
+pregunta7:- writeln(' ¿Cuál es la profesión de su personaje?'),
             read(OracionProfesion),
             %El jugador sabe la respuesta.
             OracionProfesion \= siguiente,
-              %El jugador ingresÃ³ una oraciÃ³n correcta.
+              %El jugador ingresó una oración correcta.
               (analizarFrase(OracionProfesion),
-                 (%Ponemos en una lista las caracterÃ­sticas recibidas.
+                 (%Ponemos en una lista las características recibidas.
                   findall(C, valorRecibido(C), LC),
                   %Buscamos a los famosos que cumplan las condiciones.
                   findall(NF, buscarFamoso(NF,LC), LS),
@@ -208,23 +213,23 @@ pregunta7:- writeln(' Â¿CuÃ¡l es la profesiÃ³n de su personaje?'),
                   largo(LS, N), N == 1, imprimirSolucion(LS), !;
                   %No encontramos al famoso, pasamos a la siguiente pregunta.
                   write(' '), nl, pregunta8, !);
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta7, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta7, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, pregunta8, !.
 
-pregunta8:- writeln(' Â¿CuÃ¡l es la estatura de su personaje?'),
+pregunta8:- writeln(' ¿Cuál es la estatura de su personaje?'),
             read(OracionEstatura),
             %El jugador sabe la respuesta.
             OracionEstatura \= siguiente,
-              (%El jugador ingresÃ³ una oraciÃ³n correcta.
+              (%El jugador ingresó una oración correcta.
                analizarFrase(OracionEstatura), etapaFinal, !;
-               %El jugador ingresÃ³ un oraciÃ³n incorrecta.
-               write(' No entendÃ­, repÃ­telo.'), pregunta8, !);
+               %El jugador ingresó un oración incorrecta.
+               write(' No entendí, repítelo.'), pregunta8, !);
             %El jugador no sabe la respuesta, pasamos a la siguiente pregunta.
             write(' '), nl, etapaFinal, !.
 
-etapaFinal:- %Ponemos en una lista las caracterÃ­sticas recibidas.
+etapaFinal:- %Ponemos en una lista las características recibidas.
              findall(C, valorRecibido(C), LC),
              %Buscamos a los famosos que cumplan las condiciones.
              findall(NF, buscarFamoso(NF,LC), LS),
@@ -276,7 +281,7 @@ sustantivo(singular,fem,[alajuela|S],S).
 sustantivo(singular,masc,[limon|S],S).
 sustantivo(singular,masc,[guanacaste|S],S).
 sustantivo(singular,fem,[deportes|S],S).
-sustantivo(plural,fem,[aÃ±os|S],S).
+sustantivo(plural,fem,[años|S],S).
 sustantivo(plural,fem,[metros|S],S).
 sustantivo(singular,masc,[personaje|S],S).
 sustantivo(singular,masc,[hombre|S],S).
@@ -352,7 +357,7 @@ analizarFrase(S):-oracion(_,_,S,[]).
 
 % ---------------------------------------------------------------------------------
 
-%FunciÃ³n que analiza ambos sintagmas de la oracion
+%Función que analiza ambos sintagmas de la oracion
 oracion(Num,Genero,S0,S):-   sintagma_nominal(Num,Genero,S0,S1),
                              sintagma_verbal(Num,S1,S).
 
@@ -365,18 +370,18 @@ sintagma_nominal(Num,Genero,S0,S):- determinante(Num,Genero,S0,S1),
                                     sujeto(Num,Genero,S1,S),!.
 
 % En algunas ocasiones el sigtagma nominal solo tiene determinante y el
-% sujeto es tÃ¡cito
+% sujeto es tácito
 sintagma_nominal(Num,Genero,S0,S):- determinante(Num,Genero,S0,S),!.
 
 % En algunas ocasiones el sintagma nominal solamente se conforma de
 % sujeto.
 sintagma_nominal(Num,Genero,S0,S):- sujeto(Num,Genero,S0,S),!.
 
-%Sintagma verbal es toda aquella parte de la oraciÃ³n a partir del verbo.
+%Sintagma verbal es toda aquella parte de la oración a partir del verbo.
 
 sintagma_verbal(Num,S0,S):- verbo(Num,S0,S1), compl_dir(S1,S),!.
 
-% En algunas ocasiones el verbo se encuentra despuÃ©s del complemento
+% En algunas ocasiones el verbo se encuentra después del complemento
 % directo
 
 sintagma_verbal(Num,S0,S):- compl_dir(S0,S1), verbo(Num,S1,S),!.
@@ -409,7 +414,3 @@ compl_dir(S0,S):- adjetivo(_,_,S0,S1),
 
 %Algunas veces solo constituido por sintagma nominal
 compl_dir(S0,S):- sintagma_nominal(_,_,S0,S),!.
-
-
-
-
